@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  user
+}
+
+enum UserStatus {
+  enable
+  disable
+}
+
+model User {
+  id         Int        @id @default(autoincrement())
+  username   String     @unique
+  password   String
+  nickname   String
+  avatar     String     @default("https://www.araden.top/avatar.jpg")
+  role       Role       @default(user)
+  email      String
+  createTime DateTime   @default(now())
+  status     UserStatus @default(enable)
+}
+
+// model Rule {
+//   id    String     @id @default(uuid())
+//   name  String
+//   base  String
+//   rules RuleItem[]
+//   depth Int
+// }
+
+// model RuleItem {
+//   id        String  @id @default(uuid())
+//   name      String
+//   order     Int
+//   path      String
+//   method    String
+//   resolve   Json
+//   Rule      Rule?   @relation(fields: [ruleId], references: [id])
+//   ruleId    String?
+//   parameter Param   @relation(fields: [paramId], references: [id])
+//   paramId   String
+// }
+
+// model Param {
+//   id       String     @id @default(uuid())
+//   headers  Json
+//   query    Json
+//   path     Json
+//   params   Json
+//   RuleItem RuleItem[]
+// }
+
+// model Query {
+//   id       String      @id @default(uuid())
+//   ruleId   String
+//   network  Character[]
+//   analyse  Json
+//   createAt String
+//   operator String
+//   status   Int
+// }
+
+// model Character {
+//   id         String      @id @default(uuid())
+//   infomation Json
+//   followers  Character[] @relation("follow")
+//   following  Character[] @relation("follow")
+//   Query      Query?      @relation(fields: [queryId], references: [id])
+//   queryId    String?
+// }
+
+// Mock Nowcoder
+// model NJob {
+//   jobId   Int     @id @default(autoincrement())
+//   jobName String
+//   User    NUser[]
+// }
+
+// model NUser {
+//   userId         Int     @id @default(autoincrement())
+//   nickname       String
+//   gender         String
+//   headImgUrl     String
+//   educationInfo  String
+//   workTime       String
+//   job            NJob    @relation(fields: [jobId], references: [jobId])
+//   jobId          Int
+//   enterpriseInfo String?
+//   followers      NUser[] @relation("follow")
+//   followings     NUser[] @relation("follow")
+// }
