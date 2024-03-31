@@ -1,6 +1,7 @@
 import { Pagination } from '../types';
 
 const DefaultPagination = { current: 1, pageSize: 20 };
+/** 从参数中提取分页信息，并生成 Prisma 查询中的分页参数对象，同时返回剩余参数对象 */
 export const pickPagination = <T extends Pagination>(
   params: T,
   defaultValue: Pagination = DefaultPagination,
@@ -25,6 +26,7 @@ type FuzzySearchParams<T> = {
     [type in FuzzySearchType]?: T[key];
   };
 };
+/** 从参数中提取指定的键值对，并生成 Prisma 查询中的模糊查询参数对象 */
 export const fuzzySearch = <T, U extends keyof T>(
   params: T,
   fields: U[],
@@ -44,6 +46,7 @@ export const fuzzySearch = <T, U extends keyof T>(
 
 type ArrayItem<T> = T extends Array<infer Item> ? Item : T;
 type RangeSearchType = 'lt' | 'gt' | 'lte' | 'gte';
+/** 从参数中提取指定的键值对，替换键名后，生成 Prisma 查询中的范围查询参数对象 */
 export const rangeSearch = <T, U extends keyof T, V extends PropertyKey>(
   params: T,
   transformer: [U, V, RangeSearchType[]][],
@@ -61,6 +64,7 @@ export const rangeSearch = <T, U extends keyof T, V extends PropertyKey>(
   return res;
 };
 
+/** 从参数中提取指定的键值对，并生成 Prisma 查询中的精确查询参数对象 */
 export const exactSearch = <T, U extends keyof T>(params: T, fields: U[]) => {
   const res = {} as Pick<T, U>;
 

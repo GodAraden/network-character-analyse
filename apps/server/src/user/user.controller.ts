@@ -16,7 +16,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserInfoDto, UpdateUserStatusDto } from './dto/update-user.dto';
 import { FindUserListDto, UserLoginDto } from './dto/find-user.dto';
 
-import { tips } from '../dictionary';
+import { tips } from '@app/common';
 import { CustomSession } from '../types';
 import { RolesGuard } from '../common/roles.guard';
 import { Roles } from '../common/roles.decorator';
