@@ -19,24 +19,6 @@
         "tsConfigPath": "apps/server/tsconfig.app.json"
       }
     },
-    "mock-nowcoder": {
-      "type": "application",
-      "root": "apps/mock-nowcoder",
-      "entryFile": "main",
-      "sourceRoot": "apps/mock-nowcoder/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/mock-nowcoder/tsconfig.app.json"
-      }
-    },
-    "mock-xiaohongshu": {
-      "type": "application",
-      "root": "apps/mock-xiaohongshu",
-      "entryFile": "main",
-      "sourceRoot": "apps/mock-xiaohongshu/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/mock-xiaohongshu/tsconfig.app.json"
-      }
-    },
     "config": {
       "type": "library",
       "root": "libs/config",
