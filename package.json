@@ -17,9 +17,9 @@
     "db:studio": "dotenv -e .env.local -- prisma studio --port 22888 --browser firefox",
     "————————————": "echo INFO: \"Below are commands for single app\" && exit 0",
     "dev:server": "dotenv -e .env.local -- nest start server --watch -b swc",
-    "dev:mock-n": "dotenv -e .env.local -- nest start mock-nowcoder --watch -b swc",
+    "dev:mock-n": "dotenv -e .env.local -- nest start mock-n --watch -b swc",
     "build:server": "nest build server",
-    "build:mock-n": "nest build mock-nowcoder",
+    "build:mock-n": "nest build mock-n",
     "build:config": "nest build config",
     "build:common": "nest build common",
     "build:db": "nest build db"

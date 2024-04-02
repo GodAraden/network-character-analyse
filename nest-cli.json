@@ -45,6 +45,24 @@
       "compilerOptions": {
         "tsConfigPath": "libs/db/tsconfig.lib.json"
       }
+    },
+    "mock-n": {
+      "type": "application",
+      "root": "apps/mock-n",
+      "entryFile": "main",
+      "sourceRoot": "apps/mock-n/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/mock-n/tsconfig.app.json"
+      }
+    },
+    "mock-x": {
+      "type": "application",
+      "root": "apps/mock-x",
+      "entryFile": "main",
+      "sourceRoot": "apps/mock-x/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/mock-x/tsconfig.app.json"
+      }
     }
   }
 }
