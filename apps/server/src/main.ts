@@ -8,13 +8,12 @@ import {
   PrismaExceptionFilter,
   ValidationPipe,
 } from '@app/common';
-import { PORTS } from '@app/config';
+import { AppConfigService } from '@app/config';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const port = await PORTS('getServerPort');
 
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
@@ -34,6 +33,6 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(port);
+  await app.listen(app.get(AppConfigService).ServerPort);
 }
 bootstrap();
