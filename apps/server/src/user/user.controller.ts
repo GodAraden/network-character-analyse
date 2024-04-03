@@ -8,6 +8,8 @@ import {
   ParseIntPipe,
   Session,
   ForbiddenException,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { Role } from '@prisma/client';
 
@@ -34,6 +36,7 @@ export class UserController {
 
   @Post('list')
   @Roles(Role.admin)
+  @UseInterceptors(ClassSerializerInterceptor)
   findList(@Body() params: FindUserListDto) {
     return this.userService.findList(params);
   }
@@ -65,7 +68,7 @@ export class UserController {
     @Body() params: UpdateUserInfoDto,
     @Session() session: CustomSession,
   ) {
-    if (session.user.role === Role.user && id !== session.user.id) {
+    if (session.user?.role !== Role.admin && id !== session.user?.id) {
       throw new ForbiddenException(tips.httpExeceptions.noPermission);
     }
     return this.userService.update(id, params);

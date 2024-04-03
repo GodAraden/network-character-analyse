@@ -9,7 +9,6 @@ import {
   fuzzySearch,
   rangeSearch,
   exactSearch,
-  omitResult,
 } from '../utils';
 import { UserEntity } from './entities/user.entity';
 
@@ -32,15 +31,10 @@ export class UserService {
       ]),
       ...exactSearch(restParams, ['id', 'role', 'status']),
     };
-    const select = omitResult(UserEntity, ['password']);
 
     const total = await this.dbService.user.count({ where });
-    const data = await this.dbService.user.findMany({
-      where,
-      select,
-      ...pagination,
-    });
-    return { data, total };
+    const data = await this.dbService.user.findMany({ where, ...pagination });
+    return { data: data.map((plain) => new UserEntity(plain)), total };
   }
 
   async login(params: UserLoginDto) {
