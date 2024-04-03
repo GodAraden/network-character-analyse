@@ -21,7 +21,7 @@ import { CustomSession } from '../types';
 import { RolesGuard } from '../common/roles.guard';
 import { Roles } from '../common/roles.decorator';
 
-@Controller('/api/v1/user')
+@Controller('/user')
 @UseGuards(RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}

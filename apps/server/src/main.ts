@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { VersioningType } from '@nestjs/common';
 import * as session from 'express-session';
 
 import {
@@ -21,6 +22,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.use(LoggerMiddleware);
+
+  app.setGlobalPrefix('/api');
+
+  app.enableVersioning({
+    defaultVersion: '1',
+    type: VersioningType.URI,
+  });
 
   app.use(
     session({
