@@ -1,4 +1,4 @@
-import { User, UserStatus } from '@prisma/client';
+import { $Enums, User } from '@prisma/client';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 type UpdateUserInfoProperties = 'nickname' | 'password' | 'email' | 'avatar';
@@ -27,9 +27,9 @@ export class UpdateUserInfoDto
 export class UpdateUserStatusDto
   implements Partial<Pick<User, UpdateUserStatusProperties>>
 {
-  @IsEnum(UserStatus)
+  @IsEnum($Enums.UserStatus)
   @IsOptional()
-  status?: UserStatus;
+  status?: $Enums.UserStatus;
 }
 
 export class UpdateUserDto
@@ -52,7 +52,7 @@ export class UpdateUserDto
   @IsOptional()
   avatar?: string;
 
-  @IsEnum(UserStatus)
+  @IsEnum($Enums.UserStatus)
   @IsOptional()
-  status?: UserStatus;
+  status?: $Enums.UserStatus;
 }

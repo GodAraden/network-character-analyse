@@ -10,15 +10,16 @@ import {
   ForbiddenException,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Get,
 } from '@nestjs/common';
 import { Role } from '@prisma/client';
+import { tips } from '@app/common';
 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserInfoDto, UpdateUserStatusDto } from './dto/update-user.dto';
 import { FindUserListDto, UserLoginDto } from './dto/find-user.dto';
 
-import { tips } from '@app/common';
 import { CustomSession } from '../types';
 import { RolesGuard } from '../common/roles.guard';
 import { Roles } from '../common/roles.decorator';
@@ -59,6 +60,13 @@ export class UserController {
     const user = session.user;
     delete session.user;
     return user;
+  }
+
+  @Get('info')
+  @UseInterceptors(ClassSerializerInterceptor)
+  getUserInfo(@Session() session: CustomSession) {
+    const { id = -1 } = session.user || {};
+    return this.userService.getUserInfo(id);
   }
 
   @Patch('info/:id')

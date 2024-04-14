@@ -1,4 +1,4 @@
-import { User, Role, UserStatus } from '@prisma/client';
+import { User, $Enums } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsDate,
@@ -28,17 +28,17 @@ export class CreateUserItem implements Partial<User> {
   @IsOptional()
   avatar?: string;
 
-  @IsEnum(Role)
+  @IsEnum($Enums.Role)
   @IsOptional()
-  role?: Role;
+  role?: $Enums.Role;
 
   @IsDate()
   @IsOptional()
   createTime?: Date;
 
-  @IsEnum(UserStatus)
+  @IsEnum($Enums.UserStatus)
   @IsOptional()
-  status?: UserStatus;
+  status?: $Enums.UserStatus;
 }
 
 export class CreateUserDto {

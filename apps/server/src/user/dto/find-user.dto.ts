@@ -1,4 +1,4 @@
-import { Role, User, UserStatus } from '@prisma/client';
+import { $Enums, User } from '@prisma/client';
 import {
   ArrayMaxSize,
   ArrayMinSize,
@@ -39,8 +39,8 @@ export class FindUserListDto implements FindUserListParams {
   nickname?: string;
 
   @IsOptional()
-  @IsEnum(Role)
-  role?: Role;
+  @IsEnum($Enums.Role)
+  role?: $Enums.Role;
 
   @IsOptional()
   @IsString()
@@ -53,8 +53,8 @@ export class FindUserListDto implements FindUserListParams {
   createTimeRange?: [string, string];
 
   @IsOptional()
-  @IsEnum(UserStatus)
-  status?: UserStatus;
+  @IsEnum($Enums.UserStatus)
+  status?: $Enums.UserStatus;
 }
 
 type UserLoginParams = Partial<Pick<User, 'username' | 'password'>>;
