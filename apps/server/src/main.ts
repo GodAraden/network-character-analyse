@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { VersioningType } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import * as session from 'express-session';
+import { access, mkdir } from 'fs/promises';
 
 import {
   ResponseInterceptor,
@@ -14,7 +16,7 @@ import { AppConfigService } from '@app/config';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
@@ -40,6 +42,14 @@ async function bootstrap() {
       cookie: { maxAge: null },
     }),
   );
+
+  try {
+    await access('images');
+  } catch (error) {
+    await mkdir('images');
+  }
+
+  app.useStaticAssets('images', { prefix: '/images' });
 
   await app.listen(app.get(AppConfigService).ServerPort);
 }

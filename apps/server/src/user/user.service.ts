@@ -8,6 +8,7 @@ import { FindUserListDto, UserLoginDto } from './dto/find-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { FindUserListEntity } from './entities/find-user.entity';
 import { format } from '../utils';
+import { writeFile } from 'fs/promises';
 
 @Injectable()
 export class UserService {
@@ -55,5 +56,12 @@ export class UserService {
       data: params,
       select: { id: true },
     });
+  }
+
+  async uploadFile(id: number, file: Express.Multer.File) {
+    const suffix = file.originalname.split('.').pop();
+    const filePath = `images/${[id, 'avatar', suffix].join('.')}`;
+    await writeFile(filePath, file.buffer);
+    return filePath;
   }
 }

@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Get,
+  UploadedFile,
 } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { tips } from '@app/common';
@@ -23,6 +24,7 @@ import { FindUserListDto, UserLoginDto } from './dto/find-user.dto';
 import { CustomSession } from '../types';
 import { RolesGuard } from '../common/roles.guard';
 import { Roles } from '../common/roles.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('/user')
 @UseGuards(RolesGuard)
@@ -89,5 +91,15 @@ export class UserController {
     @Body() params: UpdateUserStatusDto,
   ) {
     return this.userService.update(id, params);
+  }
+
+  @Post('avatar')
+  @Roles(Role.admin, Role.user)
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(
+    @Session() session: CustomSession,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.userService.uploadFile(session.user.id, file);
   }
 }
