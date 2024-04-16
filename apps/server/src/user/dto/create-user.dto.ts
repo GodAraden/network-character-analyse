@@ -22,7 +22,8 @@ export class CreateUserItem implements Partial<User> {
   nickname: string;
 
   @IsEmail()
-  email: string;
+  @IsOptional()
+  email?: string;
 
   @IsString()
   @IsOptional()

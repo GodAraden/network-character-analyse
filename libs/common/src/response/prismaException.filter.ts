@@ -42,7 +42,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
 
     response.status(status).json({
       status,
-      message,
+      message: [message],
       data: null,
     });
   }

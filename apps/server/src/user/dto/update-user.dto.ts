@@ -1,5 +1,5 @@
 import { $Enums, User } from '@prisma/client';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 
 type UpdateUserInfoProperties = 'nickname' | 'password' | 'email' | 'avatar';
 type UpdateUserStatusProperties = 'status';
@@ -15,7 +15,7 @@ export class UpdateUserInfoDto
   @IsOptional()
   password?: string;
 
-  @IsString()
+  @IsEmail()
   @IsOptional()
   email?: string;
 

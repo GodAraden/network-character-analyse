@@ -30,7 +30,7 @@ model User {
   nickname   String
   avatar     String     @default("https://www.araden.top/avatar.jpg")
   role       Role       @default(user)
-  email      String
+  email      String?
   createTime DateTime   @default(now())
   status     UserStatus @default(enable)
 }
