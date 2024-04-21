@@ -35,35 +35,25 @@ model User {
   status     UserStatus @default(enable)
 }
 
-// model Rule {
-//   id    String     @id @default(uuid())
-//   name  String
-//   base  String
-//   rules RuleItem[]
-//   depth Int
-// }
+model Rule {
+  id    String     @id @default(uuid())
+  name  String
+  base  String
+  rules RuleItem[]
+  depth Int
+}
 
-// model RuleItem {
-//   id        String  @id @default(uuid())
-//   name      String
-//   order     Int
-//   path      String
-//   method    String
-//   resolve   Json
-//   Rule      Rule?   @relation(fields: [ruleId], references: [id])
-//   ruleId    String?
-//   parameter Param   @relation(fields: [paramId], references: [id])
-//   paramId   String
-// }
-
-// model Param {
-//   id       String     @id @default(uuid())
-//   headers  Json
-//   query    Json
-//   path     Json
-//   params   Json
-//   RuleItem RuleItem[]
-// }
+model RuleItem {
+  id        String  @id @default(uuid())
+  name      String
+  method    String
+  path      String
+  resolve   Json
+  parameter Json
+  order     Int
+  Rule      Rule?   @relation(fields: [ruleId], references: [id])
+  ruleId    String?
+}
 
 // model Query {
 //   id       String      @id @default(uuid())

@@ -1,26 +1,83 @@
 import { Injectable } from '@nestjs/common';
+import { DBService } from '@app/db';
+
 import { CreateRuleDto } from './dto/create-rule.dto';
-import { UpdateRuleDto } from './dto/update-rule.dto';
+import { UpdateRuleDto, UpdateRuleItemDto } from './dto/update-rule.dto';
+import { FindRuleDto } from './dto/find-rule.dto';
+
+import { CreateRuleDao, CreateRuleItemDao } from './dao/create-rule.dao';
+import { FindRuleDao } from './dao/find-rule.dao';
+
+import { FindRuleView } from './view/find-rule.view';
+
+import { format } from '../utils';
 
 @Injectable()
 export class RuleService {
+  constructor(private readonly dbService: DBService) {}
+
   create(createRuleDto: CreateRuleDto) {
-    return 'This action adds a new rule';
+    return this.dbService.rule.create({
+      data: format(CreateRuleDao, createRuleDto),
+      select: { name: true },
+    });
   }
 
-  findAll() {
-    return `This action returns all rule`;
+  async findMany(findRuleDto: FindRuleDto) {
+    const { take, skip, OR } = format(FindRuleDao, findRuleDto);
+    const total = await this.dbService.rule.count({ where: { OR } });
+    const list = await this.dbService.rule.findMany({
+      take,
+      skip,
+      where: { OR },
+      include: { _count: true },
+    });
+    return { list: list.map((plain) => new FindRuleView(plain)), total };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} rule`;
+  private compareRuleItems(
+    oldArr: UpdateRuleItemDto[],
+    newArr: UpdateRuleItemDto[],
+  ) {
+    const oldRuleItemsMap = new Map(oldArr.map((item) => [item.id, item]));
+    const newRuleItemsMap = new Map(newArr.map((item) => [item.id, item]));
+    const deleteMany = oldArr
+      .filter((item) => !newRuleItemsMap.has(item.id))
+      .map((item) => ({ id: item.id }));
+    const createMany = {
+      data: newArr
+        .filter((item) => !oldRuleItemsMap.has(item.id))
+        .map((item) => new CreateRuleItemDao(item)),
+    };
+    const updateMany = newArr
+      .filter((item) => oldRuleItemsMap.has(item.id))
+      .map((item) => {
+        const { id, ...data } = item;
+        return { where: { id }, data };
+      });
+    return { deleteMany, createMany, updateMany };
   }
 
-  update(id: number, updateRuleDto: UpdateRuleDto) {
-    return `This action updates a #${id} rule`;
+  async update(id: string, updateRuleDto: UpdateRuleDto) {
+    const oldRule = await this.dbService.rule.findFirst({
+      where: { id },
+      include: { rules: true },
+    });
+
+    const { rules, ...rest } = updateRuleDto;
+
+    return this.dbService.rule.update({
+      where: { id },
+      data: {
+        ...rest,
+        rules: this.compareRuleItems(oldRule.rules, rules),
+      },
+      select: { id: true },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} rule`;
+  async remove(id: string) {
+    await this.dbService.ruleItem.deleteMany({ where: { ruleId: id } });
+    return this.dbService.rule.delete({ where: { id }, select: { id: true } });
   }
 }
