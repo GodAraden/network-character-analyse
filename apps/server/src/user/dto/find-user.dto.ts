@@ -7,25 +7,13 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  Min,
 } from 'class-validator';
-import { Mixin, Pagination } from '../../types';
+import { PaginationDto } from '../../utils/pagination.dto';
 
-type FindUserListParams = Mixin<
-  Pagination & Partial<Omit<User, 'password' | 'avatar'>>
->;
-
-export class FindUserListDto implements FindUserListParams {
-  @IsOptional()
-  @IsNumber()
-  @Min(1)
-  current?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(1)
-  pageSize?: number;
-
+export class FindUserListDto
+  extends PaginationDto
+  implements Partial<Omit<User, 'password' | 'avatar'>>
+{
   @IsOptional()
   @IsNumber()
   id?: number;

@@ -1,11 +1,9 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
 import { $Enums } from '@prisma/client';
 import { FindUserListDto } from '../dto/find-user.dto';
+import { PaginationDao } from '../../utils/pagination.dao';
 
-export class FindUserListDao {
-  private _current: number = 1;
-  private _pageSize: number = 20;
-
+export class FindUserListDao extends PaginationDao {
   id?: number;
   role?: $Enums.Role;
   status?: $Enums.UserStatus;
@@ -20,23 +18,7 @@ export class FindUserListDao {
   email?: string;
 
   @Exclude()
-  current?: number;
-
-  @Exclude()
-  pageSize?: number;
-
-  @Exclude()
   createTimeRange?: [string, string];
-
-  @Expose()
-  get skip(): number {
-    return (this._current - 1) * this._pageSize;
-  }
-
-  @Expose()
-  get take(): number {
-    return this._pageSize;
-  }
 
   @Expose()
   get createTime() {
@@ -49,16 +31,7 @@ export class FindUserListDao {
   }
 
   constructor(partial: Partial<FindUserListDto>) {
-    const { current, pageSize } = partial || {};
-    if (current) this._current = current;
-    if (pageSize) this._pageSize = pageSize;
-
-    Object.entries(partial).forEach(([key, value]) => {
-      if (value === '') {
-        partial[key] = void 0;
-      }
-    });
-
+    super(partial);
     Object.assign(this, partial);
   }
 }
