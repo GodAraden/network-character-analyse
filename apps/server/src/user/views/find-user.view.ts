@@ -1,7 +1,7 @@
 import { User, $Enums } from '@prisma/client';
 import { Exclude } from 'class-transformer';
 
-export class UserEntity implements User {
+export class FindUserView implements User {
   id: number;
   username: string;
   nickname: string;
@@ -14,7 +14,7 @@ export class UserEntity implements User {
   @Exclude()
   password: string;
 
-  constructor(partial: Partial<UserEntity>) {
+  constructor(partial: Partial<FindUserView>) {
     Object.assign(this, partial);
   }
 }

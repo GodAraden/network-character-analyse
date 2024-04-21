@@ -5,8 +5,8 @@ import { DBService } from '@app/db';
 import { CreateUserItem } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindUserListDto, UserLoginDto } from './dto/find-user.dto';
-import { UserEntity } from './entities/user.entity';
-import { FindUserListEntity } from './entities/find-user.entity';
+import { FindUserView } from './views/find-user.view';
+import { FindUserListDao } from './dao/find-user.dao';
 import { format } from '../utils';
 import { writeFile } from 'fs/promises';
 
@@ -21,7 +21,7 @@ export class UserService {
   }
 
   async findList(params: FindUserListDto) {
-    const { skip, take, ...where } = format(FindUserListEntity, params);
+    const { skip, take, ...where } = format(FindUserListDao, params);
     const count = await this.dbService.user.count({ where });
     const list = await this.dbService.user.findMany({ where, skip, take });
     return { list, count };
@@ -47,7 +47,7 @@ export class UserService {
     const userInfo = await this.dbService.user.findUnique({
       where: { id },
     });
-    return new UserEntity(userInfo);
+    return new FindUserView(userInfo);
   }
 
   update(id: number, params: UpdateUserDto) {

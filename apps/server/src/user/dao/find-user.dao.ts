@@ -1,8 +1,8 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { FindUserListDto } from '../dto/find-user.dto';
 import { $Enums } from '@prisma/client';
+import { FindUserListDto } from '../dto/find-user.dto';
 
-export class FindUserListEntity implements FindUserListDto {
+export class FindUserListDao {
   private _current: number = 1;
   private _pageSize: number = 20;
 
@@ -48,7 +48,7 @@ export class FindUserListEntity implements FindUserListDto {
     );
   }
 
-  constructor(partial: Partial<FindUserListEntity>) {
+  constructor(partial: Partial<FindUserListDto>) {
     const { current, pageSize } = partial || {};
     if (current) this._current = current;
     if (pageSize) this._pageSize = pageSize;
