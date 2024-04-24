@@ -14,27 +14,7 @@ import { format } from '../utils';
 
 @Injectable()
 export class RuleService {
-  constructor(private readonly dbService: DBService) {}
-
-  create(createRuleDto: CreateRuleDto) {
-    return this.dbService.rule.create({
-      data: format(CreateRuleDao, createRuleDto),
-      select: { name: true },
-    });
-  }
-
-  async findMany(findRuleDto: FindRuleDto) {
-    const { take, skip, OR } = format(FindRuleDao, findRuleDto);
-    const total = await this.dbService.rule.count({ where: { OR } });
-    const list = await this.dbService.rule.findMany({
-      take,
-      skip,
-      where: { OR },
-      include: { _count: true },
-    });
-    return { list: list.map((plain) => new FindRuleView(plain)), total };
-  }
-
+  // 对比规则项
   private compareRuleItems(
     oldArr: UpdateRuleItemDto[],
     newArr: UpdateRuleItemDto[],
@@ -58,6 +38,27 @@ export class RuleService {
     return { deleteMany, createMany, updateMany };
   }
 
+  constructor(private readonly dbService: DBService) {}
+
+  create(createRuleDto: CreateRuleDto) {
+    return this.dbService.rule.create({
+      data: format(CreateRuleDao, createRuleDto),
+      select: { name: true },
+    });
+  }
+
+  async findMany(findRuleDto: FindRuleDto) {
+    const { take, skip, OR } = format(FindRuleDao, findRuleDto);
+    const total = await this.dbService.rule.count({ where: { OR } });
+    const list = await this.dbService.rule.findMany({
+      take,
+      skip,
+      where: { OR },
+      include: { _count: true },
+    });
+    return { list: list.map((plain) => new FindRuleView(plain)), total };
+  }
+
   async update(id: string, updateRuleDto: UpdateRuleDto) {
     const oldRule = await this.dbService.rule.findFirst({
       where: { id },
@@ -70,7 +71,7 @@ export class RuleService {
       where: { id },
       data: {
         ...rest,
-        rules: this.compareRuleItems(oldRule.rules, rules),
+        rules: rules ? this.compareRuleItems(oldRule.rules, rules) : void 0,
       },
       select: { id: true },
     });
@@ -79,5 +80,9 @@ export class RuleService {
   async remove(id: string) {
     await this.dbService.ruleItem.deleteMany({ where: { ruleId: id } });
     return this.dbService.rule.delete({ where: { id }, select: { id: true } });
+  }
+
+  findItems(id: string) {
+    return this.dbService.ruleItem.findMany({ where: { ruleId: id } });
   }
 }

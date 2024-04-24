@@ -33,7 +33,8 @@ export class UpdateRuleDto implements Partial<Rule> {
 
 export class UpdateRuleItemDto implements Partial<RuleItem> {
   @IsString()
-  id: string;
+  @IsOptional()
+  id?: string;
 
   @IsString()
   @IsOptional()
