@@ -31,15 +31,15 @@ export class RuleController {
     return this.ruleService.create(createRuleDto);
   }
 
-  @Post('find')
+  @Post('list')
   @UseInterceptors(ClassSerializerInterceptor)
-  @Roles(Role.admin)
+  @Roles(Role.admin, Role.user)
   findAll(@Body() findRuleDto: FindRuleDto) {
     return this.ruleService.findMany(findRuleDto);
   }
 
   @Get(':id')
-  @Roles(Role.admin)
+  @Roles(Role.admin, Role.user)
   findItems(@Param('id', ParseUUIDPipe) id: string) {
     return this.ruleService.findItems(id);
   }

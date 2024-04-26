@@ -43,7 +43,7 @@ export class RuleService {
   create(createRuleDto: CreateRuleDto) {
     return this.dbService.rule.create({
       data: format(CreateRuleDao, createRuleDto),
-      select: { name: true },
+      select: { id: true },
     });
   }
 
@@ -83,6 +83,9 @@ export class RuleService {
   }
 
   findItems(id: string) {
-    return this.dbService.ruleItem.findMany({ where: { ruleId: id } });
+    return this.dbService.rule.findUniqueOrThrow({
+      where: { id },
+      include: { rules: true },
+    });
   }
 }
