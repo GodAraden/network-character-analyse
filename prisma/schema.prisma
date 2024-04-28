@@ -23,6 +23,12 @@ enum UserStatus {
   disable
 }
 
+enum QueryStatus {
+  loading
+  failed
+  success
+}
+
 model User {
   id         Int        @id @default(autoincrement())
   username   String     @unique
@@ -33,37 +39,42 @@ model User {
   email      String?
   createTime DateTime   @default(now())
   status     UserStatus @default(enable)
+  queries    Query[]
 }
 
 model Rule {
-  id    String     @id @default(uuid())
-  name  String
-  base  String
-  rules RuleItem[]
-  depth Int
+  id      String     @id @default(uuid())
+  name    String
+  base    String
+  rules   RuleItem[]
+  queries Query[]
+  depth   Int
 }
 
 model RuleItem {
-  id        String  @id @default(uuid())
+  id        String @id @default(uuid())
   name      String
   method    String
   path      String
   resolve   Json
   parameter Json
   order     Int
-  Rule      Rule?   @relation(fields: [ruleId], references: [id])
-  ruleId    String?
+  Rule      Rule   @relation(fields: [ruleId], references: [id])
+  ruleId    String
 }
 
-// model Query {
-//   id       String      @id @default(uuid())
-//   ruleId   String
-//   network  Character[]
-//   analyse  Json
-//   createAt String
-//   operator String
-//   status   Int
-// }
+model Query {
+  id         String      @id @default(uuid())
+  name       String
+  rule       Rule        @relation(fields: [ruleId], references: [id])
+  ruleId     String
+  network    Json
+  analyse    Json
+  createAt   DateTime    @default(now())
+  operator   User        @relation(fields: [operatorId], references: [id])
+  operatorId Int
+  status     QueryStatus @default(loading)
+}
 
 // model Character {
 //   id         String      @id @default(uuid())

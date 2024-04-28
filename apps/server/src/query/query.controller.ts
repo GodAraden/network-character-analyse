@@ -6,23 +6,35 @@ import {
   Patch,
   Param,
   Delete,
+  ClassSerializerInterceptor,
+  UseInterceptors,
+  Session,
 } from '@nestjs/common';
+
 import { QueryService } from './query.service';
 import { CreateQueryDto } from './dto/create-query.dto';
 import { UpdateQueryDto } from './dto/update-query.dto';
+import { CustomSession } from '../types';
+import { ListQueryDto } from './dto/list-query.dto';
 
 @Controller('query')
 export class QueryController {
   constructor(private readonly queryService: QueryService) {}
 
-  @Post()
-  create(@Body() createQueryDto: CreateQueryDto) {
-    return this.queryService.create(createQueryDto);
+  @Post('start')
+  create(
+    @Body() createQueryDto: CreateQueryDto,
+    @Session() session: CustomSession,
+  ) {
+    // FIXME: mock
+    const { id } = session.user || { id: 1 };
+    return this.queryService.create(id, createQueryDto);
   }
 
-  @Get()
-  findAll() {
-    return this.queryService.findAll();
+  @Post('list')
+  @UseInterceptors(ClassSerializerInterceptor)
+  findList(@Body() params: ListQueryDto) {
+    return this.queryService.findList(params);
   }
 
   @Get(':id')
