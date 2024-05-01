@@ -44,6 +44,12 @@ export class UserController {
     return this.userService.findList(params);
   }
 
+  @Get('all')
+  @Roles(Role.admin, Role.user)
+  findAll() {
+    return this.userService.findAll();
+  }
+
   @Post('login')
   async login(@Body() params: UserLoginDto, @Session() session: CustomSession) {
     // 页面加载时会发送一个空的登录请求，通过 cookie 登陆方式

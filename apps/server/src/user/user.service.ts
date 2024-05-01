@@ -20,11 +20,21 @@ export class UserService {
     });
   }
 
+  findAll() {
+    return this.dbService.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        nickname: true,
+      },
+    });
+  }
+
   async findList(params: FindUserListDto) {
     const { skip, take, ...where } = format(FindUserListDao, params);
     const count = await this.dbService.user.count({ where });
     const list = await this.dbService.user.findMany({ where, skip, take });
-    return { list, count };
+    return { list: list.map((user) => new FindUserView(user)), count };
   }
 
   async login(params: UserLoginDto) {
