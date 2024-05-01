@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { DBService } from '@app/db';
 
 import { CreateQueryDto } from './dto/create-query.dto';
-import { UpdateQueryDto } from './dto/update-query.dto';
 import { ListQueryDao } from './dao/list-query.dao';
 import { ListQueryDto } from './dto/list-query.dto';
 
@@ -30,20 +29,31 @@ export class QueryService {
     console.log(params, where);
 
     const count = await this.dbService.query.count({ where });
-    const list = await this.dbService.query.findMany({ where, skip, take });
+    const list = await this.dbService.query.findMany({
+      where,
+      skip,
+      take,
+      orderBy: { createAt: 'desc' },
+      select: {
+        id: true,
+        name: true,
+        ruleId: true,
+        operatorId: true,
+        createAt: true,
+        status: true,
+      },
+    });
     return { list, count };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} query`;
+  findOne(id: string) {
+    return this.dbService.query.findUniqueOrThrow({ where: { id } });
   }
 
-  update(id: number, updateQueryDto: UpdateQueryDto) {
-    console.log(updateQueryDto);
-    return `This action updates a #${id} query`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} query`;
+  remove(id: string) {
+    return this.dbService.query.delete({
+      where: { id },
+      select: { id: true },
+    });
   }
 }
