@@ -76,32 +76,70 @@ model Query {
   status     QueryStatus @default(loading)
 }
 
-// model Character {
-//   id         String      @id @default(uuid())
-//   infomation Json
-//   followers  Character[] @relation("follow")
-//   following  Character[] @relation("follow")
-//   Query      Query?      @relation(fields: [queryId], references: [id])
-//   queryId    String?
-// }
-
 // Mock Nowcoder
-// model NJob {
-//   jobId   Int     @id @default(autoincrement())
-//   jobName String
-//   User    NUser[]
-// }
+enum NGender {
+  male
+  female
+}
 
-// model NUser {
-//   userId         Int     @id @default(autoincrement())
-//   nickname       String
-//   gender         String
-//   headImgUrl     String
-//   educationInfo  String
-//   workTime       String
-//   job            NJob    @relation(fields: [jobId], references: [jobId])
-//   jobId          Int
-//   enterpriseInfo String?
-//   followers      NUser[] @relation("follow")
-//   followings     NUser[] @relation("follow")
-// }
+enum NEnterpriseType {
+  fieldwork
+  hired
+  formal
+}
+
+model NJob {
+  jobId   Int     @id @default(autoincrement())
+  jobName String  @unique
+  users   NUser[]
+}
+
+model NSchool {
+  schoolId   Int     @id @default(autoincrement())
+  schoolName String  @unique
+  users      NUser[]
+}
+
+model NEnterprise {
+  id             Int     @id @default(autoincrement())
+  enterpriseName String  @unique
+  users          NUser[]
+}
+
+model NPost {
+  id       String   @id @default(uuid())
+  title    String
+  content  String
+  likes    Int      @default(0)
+  comments Int      @default(0)
+  retweets Int      @default(0)
+  tags     Json?
+  type     String?
+  postAt   DateTime @default(now())
+  postBy   NUser    @relation(fields: [userId], references: [userId])
+  userId   Int
+}
+
+model NUser {
+  userId         Int      @id @default(autoincrement())
+  nickname       String
+  gender         NGender?
+  headImgUrl     String?
+  workTime       String?
+  enterpriseInfo String?
+
+  job   NJob? @relation(fields: [jobId], references: [jobId])
+  jobId Int?
+
+  school   NSchool? @relation(fields: [schoolId], references: [schoolId])
+  schoolId Int?
+
+  enterprise     NEnterprise?     @relation(fields: [enterpriseId], references: [id])
+  enterpriseId   Int?
+  enterpriseType NEnterpriseType?
+
+  posts NPost[]
+
+  followers  NUser[] @relation("follow")
+  followings NUser[] @relation("follow")
+}
