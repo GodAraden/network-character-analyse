@@ -39,6 +39,12 @@ export class CreateRuleDto implements Partial<Rule> {
   @IsNumber()
   depth: number;
 
+  @IsJSON()
+  resolve: Prisma.JsonValue;
+
+  @IsJSON()
+  parameter: Prisma.JsonValue;
+
   @IsArray()
   @ArrayNotEmpty()
   @ValidateNested()

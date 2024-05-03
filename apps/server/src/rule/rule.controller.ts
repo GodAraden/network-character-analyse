@@ -9,7 +9,7 @@ import {
   UseInterceptors,
   Get,
   ParseUUIDPipe,
-  UseGuards,
+  // UseGuards,
 } from '@nestjs/common';
 import { Role } from '@prisma/client';
 
@@ -18,10 +18,10 @@ import { CreateRuleDto } from './dto/create-rule.dto';
 import { UpdateRuleDto } from './dto/update-rule.dto';
 import { FindRuleDto } from './dto/find-rule.dto';
 import { Roles } from '../common/roles.decorator';
-import { RolesGuard } from '../common/roles.guard';
+// import { RolesGuard } from '../common/roles.guard';
 
 @Controller('rule')
-@UseGuards(RolesGuard)
+// @UseGuards(RolesGuard)
 export class RuleController {
   constructor(private readonly ruleService: RuleService) {}
 
@@ -40,6 +40,7 @@ export class RuleController {
 
   @Get(':id')
   @Roles(Role.admin, Role.user)
+  @UseInterceptors(ClassSerializerInterceptor)
   findItems(@Param('id', ParseUUIDPipe) id: string) {
     return this.ruleService.findItems(id);
   }

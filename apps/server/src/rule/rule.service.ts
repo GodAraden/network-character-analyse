@@ -8,7 +8,7 @@ import { FindRuleDto } from './dto/find-rule.dto';
 import { CreateRuleDao, CreateRuleItemDao } from './dao/create-rule.dao';
 import { FindRuleDao } from './dao/find-rule.dao';
 
-import { FindRuleView } from './view/find-rule.view';
+import { FindRuleItemView, FindRuleView } from './view/find-rule.view';
 
 import { format } from '../utils';
 
@@ -82,10 +82,12 @@ export class RuleService {
     return this.dbService.rule.delete({ where: { id }, select: { id: true } });
   }
 
-  findItems(id: string) {
-    return this.dbService.rule.findUniqueOrThrow({
-      where: { id },
-      include: { rules: true },
-    });
+  async findItems(id: string) {
+    return new FindRuleItemView(
+      (await this.dbService.rule.findUniqueOrThrow({
+        where: { id },
+        include: { rules: { orderBy: { order: 'asc' } } },
+      })) as any,
+    );
   }
 }

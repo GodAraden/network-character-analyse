@@ -23,6 +23,14 @@ export class UpdateRuleDto implements Partial<Rule> {
   @IsOptional()
   depth?: number;
 
+  @IsJSON()
+  @IsOptional()
+  resolve?: Prisma.JsonValue;
+
+  @IsJSON()
+  @IsOptional()
+  parameter?: Prisma.JsonValue;
+
   @IsArray()
   @IsOptional()
   @ArrayNotEmpty()

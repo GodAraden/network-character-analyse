@@ -24,6 +24,8 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     let message = exception.message;
     const status = 520;
 
+    console.log(exception);
+
     if (exception instanceof Prisma.PrismaClientValidationError) {
       // 参数验证失败
       message = tips.prismaExeceptions.validation;

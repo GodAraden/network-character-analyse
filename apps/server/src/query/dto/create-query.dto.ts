@@ -8,7 +8,7 @@ export class CreateQueryDto {
   name: string;
 
   @IsJSON()
-  header: string;
+  resolve: string;
 
   @IsJSON()
   parameter: string;
