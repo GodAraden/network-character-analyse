@@ -32,8 +32,7 @@ export class QueryController {
     @Body() createQueryDto: CreateQueryDto,
     @Session() session: CustomSession,
   ) {
-    // FIXME: mock
-    const { id } = session.user || { id: 1 };
+    const { id } = session.user;
     return this.queryService.create(id, createQueryDto);
   }
 

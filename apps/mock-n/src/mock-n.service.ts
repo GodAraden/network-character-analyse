@@ -15,7 +15,10 @@ export class MockNService {
     });
   }
 
-  async getUserRelation(id: number, type: 'followers' | 'followings') {
+  async getUserRelation(
+    id: number,
+    type: 'followers' | 'followings' = 'followings',
+  ) {
     return (
       await this.dbService.nUser.findUnique({
         where: { userId: id },

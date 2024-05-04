@@ -1,4 +1,4 @@
-import { IsJSON, IsString } from 'class-validator';
+import { IsDefined, IsString } from 'class-validator';
 
 export class CreateQueryDto {
   @IsString()
@@ -7,9 +7,9 @@ export class CreateQueryDto {
   @IsString()
   name: string;
 
-  @IsJSON()
+  @IsDefined()
   resolve: string;
 
-  @IsJSON()
+  @IsDefined()
   parameter: string;
 }
