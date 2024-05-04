@@ -94,8 +94,8 @@ function generatePosts(length: number, userId: number): Post[] {
     const title = `Post Title ${i + 1}`;
     const content = `This is the content of the ${i + 1}st post.`;
     const likes = Math.floor(Math.random() * 1001); // 生成0-1000之间的随机整数
-    const comments = Math.floor(Math.random() * 1001);
-    const retweets = Math.floor(Math.random() * 1001);
+    const comments = Math.floor(Math.random() * 101);
+    const retweets = Math.floor(Math.random() * 501);
     const tags = getRandomSubArrayEfficient(
       [
         '前端开发面经',
@@ -294,6 +294,6 @@ async function main(options: {
 
 main({
   userCount: 0,
-  maxPostCount: 0, // 6
-  maxFollowCount: 0, // 15
+  maxPostCount: 6,
+  maxFollowCount: 15,
 });
